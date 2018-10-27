@@ -1,8 +1,8 @@
 
 ITE Condition(If Then and Else) 
 
-We are seeing the Errors after building the first code because The instructions following the IT instruction should be conditional or should contain conditional code within them like MOVGT or ADDGT etc, But the instructions following IT instruction in first example code are not conditional i.e "MOV" they don't contain conditional code. 
-So inorder to solve the error we must append conditional code LT to MOV instruction for IT Instruction and append GE to MOV instruction for Else part since the ELSE condition must be the inverse of the THEN condition these two fields differ only in the LSB of the encoding.
+1. We are seeing the Errors after building the first code because The instructions following the "IT" instruction should be conditional or should contain conditional code within them like "MOVGT" or "ADDGT" etc, But the instructions following "IT" instruction in first example code are not conditional i.e "MOV" they don't contain conditional code. 
+So inorder to solve the error we must append conditional code "LT" to "MOV" instruction for "IT" part and append "GE" to "MOV" instruction for "Else" part since the ELSE condition must be the inverse of the THEN condition these two fields differ only in the LSB of the encoding.
 
-We Don't see any error after building second code because the instructions following IT instruction are Conditional instructions and contain conditional codes for IF part and Else part are according to the rule ELSE condition must be the inverse of the THEN condition these two fields differ only in the LSB of the encoding.
-For Example ADDLT of IF part and SUBGE of Else part
+2. We Don't see any error after building second code because the instructions following "IT" instruction are Conditional instructions and contain conditional codes for IF part and Else part are according to the rule "ELSE condition must be the inverse of the THEN condition these two fields differ only in the LSB of the encoding".
+For Example ADDLT of IF part and SUBGE of Else part.
