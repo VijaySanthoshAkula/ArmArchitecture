@@ -1,0 +1,61 @@
+1.	Precession of the number is formed by both exponent and fractional part, but fractional part is most prominent one in defining 
+precession. As number of bits in fractional part increases precession or accuracy increases that’s the reason for single precession 
+and double precession. The equation for single Precession is
+(-1)s *(1.0+fraction)*(2)e-127
+And Equation for Double Precession is
+ (-1)s *(1.0+fraction)*(2)e-1023
+For Example if we want to know precession of a floating point number whose Hexadecimal Representation is 40CAAAAB and Decimal Representation is 6.333333492279053 in single and double precession then it is as follows
+Single Precession:
+SignBit: 0
+Exponent: 10000001
+Fraction: 1 .10010101010101010101011
+Double Precession:
+SignBit: 0
+Exponent: 10000000001
+Fraction: 1 .1001010101010101010101100000000000000000000000000000
+Whose decimal equivalent is 6.3333334922790530. 
+So as seen from above discussion Fractional part major role in precession.
+
+2.	Normal and Subnormal Values as per IEEE 754
+Precision is increased by this IEEE 754 standard normalized significand which implies most significant bit of significand is always 1. 
+So according to this standard significand is 24 bits long where 23 bits is stored in memory and implied one is shown as below.
+Normal representation in the IEEE Standard is (– 1) s × (1. f ) 2 × 2exponent – 127 
+s is the sign bit
+ f represents the bits in the significand. 
+ 1 is the most significant bit of the significand and is explicitly shown.
+Example: 
+SignBit: 0
+Exponent: 10000001
+Fraction: 1 .10010101010101010101011
+Decimal Representation: 6.33333349
+Subnormal Numbers:
+In Subnormal Numbers exponent bits are 0 and leading hidden bit is 0. Representation is as follows
+(–1)s × 0.f × 2power(–127)
+Example:
+Sign: 0 
+Exponent: 00000000 
+Fraction: 00000000000000000010001
+
+
+3.	IEEE 754vv Standards of Floating Point Number Rounding types:
+round to nearest ties to even: rounded to nearest even value
+Ex: Original Value: 7.5
+      Rounded Value: 8
+      Original Value: 6.5
+      Rounded Value: 6
+round down: This is like rounding towards negative infinity
+Ex: Original Value: 7.5
+      Rounded Value: 7
+
+round up: This is like rounding towards positive Infinity
+Ex: Original Value: 7.5
+      Rounded Value: 8
+
+round towards zero: This is like round away from infinity or roundind towards zero
+Ex: Original Value: 6.5
+      Rounded Value: 6
+
+round away from zero: This is like rounding away from zero.
+Ex: Original Value: 6.5
+      Rounded Value: 7
+
