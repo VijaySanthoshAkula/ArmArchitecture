@@ -26,11 +26,11 @@ LOOP      VMUL.F32 S1,S1,S2; t = t*x
 
 __main    FUNCTION
 	    B Initialize;
-Sigmoid	VLDR.F32 S6,=1;
+SigmoidCal	VLDR.F32 S6,=1;
 		VADD.F32 S4,S6,S3;
 		VDIV.F32 S7,S3,S4;Sigmoid function is stored in S7
 		B Decide;
-Decide	VLDR.F32 S20 ,=0.5;
+Decide	VLDR.F32 S20 ,=0.5;Deciding function
 		VCMP.F32 S7, S20 ; 
 		VMRS.F32 APSR_nzcv,FPSCR ; 
 		ITE HI
@@ -38,19 +38,19 @@ Decide	VLDR.F32 S20 ,=0.5;
 		MOVLS R0,#0; 
 		;BL printMsg;		
 		B stop;
-Weighted_X_Cacl VMLA.F32 S3, S11, S16;
+Weighted_X_Cacl VMLA.F32 S3, S11, S16;Mutliplying weights with inputs
 	    VMLA.F32 S3, S12, S17;
 		VMLA.F32 S3, S13, S18;
 		VADD.F32 S3, S3, S14;
-		BL EXPNFN;
-		B Sigmoid;
-Initialize VLDR.F32 S16,=1 ;X0
-		VLDR.F32 S17,=0	;X1
-		VLDR.F32 S18,=1	;X2
-		ADR.W  R10, OffsetTable;
-		MOV R11,#4 ;
-		TBB   [R10, R11] ;
-Logic_AND VLDR.F32 S11,=-0.1;
+		BL EXPNFN;calling exponential function
+		B SigmoidCal;calling sigmoid function
+Initialize VLDR.F32 S16,=1 ;Setting first input
+		VLDR.F32 S17,=0	;setting second input
+		VLDR.F32 S18,=1	;setting third input
+		ADR.W  R10, OffsetTable;Storing Offset table into R10
+		MOV R11,#4 ;Choosing the Operation 0. And 1. Or 2. Not 3. Nand 4. Nor 5. Xor 6. Xnor
+		TBB   [R10, R11] ; arm's Switch
+Logic_AND VLDR.F32 S11,=-0.1;weights as defined in python
 		VLDR.F32 S12,=0.2;
 		VLDR.F32 S13,=0.2;
 		VLDR.F32 S14,=-0.2;
@@ -92,11 +92,6 @@ OffsetTable	DCB    0
 		DCB    ((Logic_NOR-Logic_AND)/2)	
 		DCB    ((Logic_XOR-Logic_AND)/2)
 		DCB    ((Logic_XNOR-Logic_AND)/2)
-
-		
-		;MOV R8,#0x20000000;
-		;VSTR.F32 S7,[R8];
-		;VLDR.F32 S8,[R8];
 stop    B stop 
         ENDFUNC 
         END
