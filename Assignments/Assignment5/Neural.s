@@ -1,5 +1,5 @@
  AREA     appcode, CODE, READONLY
-     export __main	 
+	 export __main	 
 	 ENTRY
 EXPNFN    FUNCTION 
 	    VCMP.F32 S3,#0;
@@ -24,8 +24,7 @@ LOOP      VMUL.F32 S1,S1,S2; t = t*x
 		ENDFUNC
 		
 
-__main    FUNCTION  
-	    MOV 
+__main    FUNCTION
 	    B Initialize;
 Sigmoid	VLDR.F32 S6,=1;
 		VADD.F32 S4,S6,S3;
