@@ -423,6 +423,9 @@ PopltPixels   STR r3, [r6], #4;
 			  ADD r3,r3,#1;
 			  BNE PopltPixels
 			  STR r6, [r4], #0;
+			  LDR r9,=0x20000170;
+			  LDR r10,=0x20000174; Starting address of server side decoded pixel values
+			  STR r10, [r9], #0
 LoopAllPixel  LDR r0, [r2, #0];
 			  STR r2, [r6], #0;store current location
 			  ;MOV r0,#100;
@@ -438,6 +441,11 @@ LoopAllPixel  LDR r0, [r2, #0];
 			  BL Decoding;
 			  MOV  r1,#9;key for decryption
 			  BL Decription;
+			  LDR r9,=0x20000170;
+			  LDR r10, [r9, #0];
+			  STR r0, [r10], #0;
+			  ADD r10,r10,#4;
+			  STR r10, [r9], #0;
 			  LDR r3,=0x2000016C
 			  LDR r4,=0x20000140
 			  LDR r6,=0x2000016C
