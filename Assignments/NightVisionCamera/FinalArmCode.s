@@ -126,7 +126,7 @@ ParityCheck    FUNCTION
 	  ADD     r10,r10,r8; Adding c4
 	  LSL     r9,r12,#3;
 	  ADD     r10,r10,r9; Adding c4
-	  MOV     r0,r10;
+	  MOV     r9,r10;C in r9 signifies the bit at which error bit is there
       BX      LR;
 ;ENDFUNC
 
@@ -411,7 +411,7 @@ __main  function
 			  LDR r8,=0x20000100 ;Starting address of first x
 			  STR r8, [r7], #0;
 			  BL CrossWire; 
-			  
+			  ;---------Client Code begins Here---------
 			  MOV r5,#10;
 			  MOV r3,#1;
 			  LDR r4,=0x20000140 ; Contains pixel count
@@ -434,11 +434,14 @@ LoopAllPixel  LDR r0, [r2, #0];
 			  BL Encoding;
 			  
 			  
-			  
-			  
-			  ;Server Code Begins
-			  
-			  BL Decoding;
+			  ;-------Server Code Begins-------
+			  BL ParityCheck; checking whether any noise has corrupted our packet
+			  CMP r9,#0;
+			  BEQ Continue; 
+			  MOV r12,#1;
+			  LSL r12,r12,r9;
+			  EORS r0,r0,r12;
+Continue	  BL Decoding;
 			  MOV  r1,#9;key for decryption
 			  BL Decription;
 			  LDR r9,=0x20000170;
