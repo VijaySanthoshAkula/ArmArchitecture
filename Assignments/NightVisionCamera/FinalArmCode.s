@@ -67,7 +67,7 @@ ParityCheck    FUNCTION
 	  EORS    r2,r2,r9;
 	  EORS    r2,r2,r10;
 	  EORS    r2,r2,r11;C2 value is computed
-	  LSL     r5,r4,#4;
+	  LSL     r5,r4,#3;
 	  AND    r6, r0, r5;Extracting p4
 	  cmp     r6,#0
 	  ITE     GT
@@ -150,7 +150,7 @@ Decoding    FUNCTION
 	  ITE     GT
 	  MOVGT    r8,#1;
 	  MOVLE    r8,#0;
-	  LSL     r5,r4,#7;
+	  LSL     r5,r4,#6;
 	  AND     r9, r0, r5;Extracting d3
 	  cmp     r9,#0
 	  ITE     GT
@@ -201,6 +201,9 @@ Decoding    FUNCTION
       BX      LR;
 ;ENDFUNC
 Encription    FUNCTION 
+	          EOR  r0,r0,r1;
+              BX      LR;
+Decription    FUNCTION 
 	          EOR  r0,r0,r1;
               BX      LR;
 
@@ -344,12 +347,10 @@ Encoding    FUNCTION
 	  MOV     r0,r11;  moving 12 bits D7,D6,D5,D4,P8,D3,D2,D1,P4,D0,P2,P1 from r11 to r0 Now Encoding will be present in r0
       BX      LR;
 CrossWire    FUNCTION
-	          ;MOV r1,#320; x extreme
-			  ;MOV r2,#240; y extreme
 			  ADD r7,r1,r2;
 			  SUB r7,r7,#1;
-			  MOV r3,#5; received x
-			  MOV r4,#1; received y
+			  ;MOV r3,#5; received x
+			  ;MOV r4,#1; received y
 			  MOV r6,#0;counter for generating cross
 			  
 			  ADD r9,r1,#1;
@@ -404,10 +405,13 @@ __main  function
 	          ;Inputs for Cross Wire
 	          MOV r1,#5; x extreme 
 			  MOV r2,#4; y extreme 
+			  MOV r3,#5; received x
+			  MOV r4,#1; received y
 			  LDR r7,=0x20000000 ;This location stores address of list of x,y
 			  LDR r8,=0x20000100 ;Starting address of first x
 			  STR r8, [r7], #0;
 			  BL CrossWire; 
+			  
 			  MOV r5,#10;
 			  MOV r3,#1;
 			  LDR r4,=0x20000140 ; Contains pixel count
@@ -418,28 +422,30 @@ PopltPixels   STR r3, [r6], #4;
 			  CMP r5,r3;
 			  ADD r3,r3,#1;
 			  BNE PopltPixels
-			  ;LDR r0, [r2, #0];
-			  MOV r0,#204;
-			  MOV r1,#9;
+			  STR r6, [r4], #0;
+LoopAllPixel  LDR r0, [r2, #0];
+			  STR r2, [r6], #0;store current location
+			  ;MOV r0,#100;
+			  MOV r1,#9;key for encryption
 			  BL Encription;
 			  BL Encoding;
-			  MOV r2,#0;
-			  MOV r3,#0;
-			  MOV r4,#0;
-			  MOV r5,#0;
-			  MOV r6,#0;
-			  MOV r7,#0;
-			  MOV r8,#0;
-			  MOV r9,#0;
-			  MOV r10,#0;
-			  MOV r11,#0;
-			  MOV r12,#0;
+			  
+			  
+			  
+			  
+			  ;Server Code Begins
+			  
 			  BL Decoding;
-			  MOV  r1,#9;
-			  BL Encription;
-	          ;MOV r0,#3110;r0 contains 12 bit input
-			 ; BL ParityCheck;
-			 ; BL Decoding;
+			  MOV  r1,#9;key for decryption
+			  BL Decription;
+			  LDR r3,=0x2000016C
+			  LDR r4,=0x20000140
+			  LDR r6,=0x2000016C
+			  LDR r7, [r4, #0];
+			  LDR r2, [r3, #0];
+	          ADD r2,r2,#4;//next data address
+			  cmp r2,r7
+			  BNE LoopAllPixel
 stop        B stop  ; stop program
         endfunc
       end
