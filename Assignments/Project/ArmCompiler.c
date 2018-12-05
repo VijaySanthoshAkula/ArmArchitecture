@@ -7,7 +7,7 @@ College: IIIT Bangalore
 #include <stdlib.h>
 #include <string.h>
 #define expsize 100
-#define start_addr 0x20000100
+#define start_addr 0x20000000
 
 
 
